@@ -17,8 +17,43 @@
   <script src="code.js"></script>
   <script src="blocks.js"></script>  
   <script src="codeGenerator.js"></script>
+  <script>
+
+     function saveXml() {
+        var text = document.all.content_xml.value;
+        var filename = "project.xml"
+        var tempElem = document.getElementById ( 'download')
+        tempElem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        tempElem.setAttribute('download', filename);
+        tempElem.click();
+     }                      
+     
+     function saveHTML() {
+        var text = document.all.content_javascript.innerText;
+        var filename = "project.html"
+        var tempElem = document.getElementById ( 'download')
+        tempElem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        tempElem.setAttribute('download', filename);
+        tempElem.click();
+     }
+     
+     function loadBody() {
+        document.getElementById('inputfile').onclick = function () {
+            this.value = null; // To allow selecting the same filename 
+        };                  
+        document.getElementById('inputfile') 
+           .addEventListener('change', function() {                             
+              var fr=new FileReader(); 
+              fr.onload=function(){ 
+                 document.all.content_xml.value = fr.result;
+              }                                
+              fr.readAsText(this.files[0]); 
+           }
+        )     
+     }
+  </script>
 </head>
-<body>
+<body onload="loadBody();">
   <table width="100%" height="100%">
     <tr>
       <td>
@@ -38,7 +73,7 @@
           <tr id="tabRow" height="1em">
             <td id="tab_blocks" class="tabon">...</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
-            <td id="tab_javascript" class="taboff tab_collapse">HTML-JavaScript</td>
+            <td id="tab_javascript" class="taboff tab_collapse">HTML-JavaScript <input type="button" style="border:1px solid" value="Load" onclick="document.getElementById('inputfile').click();" /> <input type="button" value="save" onclick="saveHTML();"></td>
             <td class="tabmin tab_collapse">&nbsp;</td>
             <td id="tab_python" class="taboff tab_collapse">Python</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
@@ -48,7 +83,7 @@
             <td class="tabmin tab_collapse">&nbsp;</td>
             <td id="tab_dart" class="taboff tab_collapse">Dart</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
-            <td id="tab_xml" class="taboff tab_collapse">XML <input type="button" value="save"></td>
+            <td id="tab_xml" class="taboff tab_collapse">XML <input type="button" value="save" onclick="saveXml();"></td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_code" class="taboff">
               <select id="code_menu"></select>
@@ -404,6 +439,8 @@
     <category name="%{BKY_CATVARIABLES}" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
     <category name="%{BKY_CATFUNCTIONS}" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
   </xml>
-
+  
+  <a id="download"></a>
+  <input id="inputfile" accept=".xml" type="file" name="inputfile" id="inputfile" style="display:none"/>
 </body>
 </html>
