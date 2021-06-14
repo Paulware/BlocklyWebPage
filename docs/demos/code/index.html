@@ -15,10 +15,20 @@
   <script src="../../lua_compressed.js"></script>
   <script src="../../dart_compressed.js"></script>
   <script src="code.js"></script>
-  <script src="blocks.js"></script>  
-  <script src="codeGenerator.js"></script>
+  <script src="blocks.js"></script>
+  <script type="text/javascript">      
+     function loadXml () {
+        alert ( 'load xml' );
+        var fr=new FileReader(); 
+        fr.onload=function(){
+           alert ( 'onload triggered' );
+           alert ( 'got result: ' + fr.result );            
+        } 
+        fr.readAsText('C:\SpigotMC\scriptcraft\plugins\spleef.xml');    
+     }
+  </script>   
+  <script src="codeGenerator.js"></script>   
   <script>
-
      function saveXml() {
         var text = document.all.content_xml.value;
         var filename = "project.xml"
@@ -37,7 +47,7 @@
         tempElem.click();
      }
      
-     function loadBody() {
+     function loadBody() {     
         document.getElementById('inputfile').onclick = function () {
             this.value = null; // To allow selecting the same filename 
         };                  
@@ -73,7 +83,9 @@
           <tr id="tabRow" height="1em">
             <td id="tab_blocks" class="tabon">...</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
-            <td id="tab_javascript" class="taboff tab_collapse">HTML-JavaScript <input type="button" style="border:1px solid" value="Load" onclick="document.getElementById('inputfile').click();" /> <input type="button" value="save" onclick="saveHTML();"></td>
+            <td id="tab_javascript" class="taboff tab_collapse">HTML-JavaScript
+              <input type="button" style="border:1px solid" value="Load" onclick="document.getElementById('inputfile').click();" /> <input type="button" value="save" onclick="saveHTML();">
+            </td>
             <td class="tabmin tab_collapse">&nbsp;</td>
             <td id="tab_python" class="taboff tab_collapse">Python</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
@@ -83,7 +95,11 @@
             <td class="tabmin tab_collapse">&nbsp;</td>
             <td id="tab_dart" class="taboff tab_collapse">Dart</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
-            <td id="tab_xml" class="taboff tab_collapse">XML <input type="button" value="save" onclick="saveXml();"></td>
+            <td id="tab_xml" class="taboff tab_collapse">XML 
+              <input type="button" value="save" onclick="saveXml();">
+              <input type="button" style="border:1px solid" value="load" onclick="document.getElementById('inputfile').click();" />                                    
+              <input id="inputfile" accept=".xml" type="file" name="inputfile" id="inputfile" style="display:none"/>                         
+            </td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_code" class="taboff">
               <select id="code_menu"></select>
@@ -118,17 +134,39 @@
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Web-Page" colour="320">       
+       <block type="raw"></block>
        <block type="html"></block>
-       <category name="HTML"></block>
+       <category name="HTML">
           <block type="checkbox"></block>
+          <block type="slider"></block>
+          <block type="htmltext"></block>
+          <block type="linebreak"></block>
+          <block type="textinput"></block>
+          <block type="div"></block>
+          <block type="button"></block>
+          <category name="SELECT">
+             <block type="select"></block>
+             <block type="option"></block>
+          </category>
        </category>
        <block type="head"></block>
        <block type="script"></block>
+       <block type="scriptinclude"></block>
        <block type="body"></block>
     </category>
     <category name="JavaScript" colour="240">
-       <block type="function"></block>
-       <block type="functionparameter"></block>
+       <!category name="Function">
+          <!block type="function"><!/block>
+          <!block type="functionparameter"><!/block>
+          <!block type="functionreturn"><!/block>
+          <!block type="callfunction"><!/block>
+          <!block type="callfunctionreturn"><!/block>          
+       <!/category>
+       <block type="expression"></block>
+       <block type="getelement"></block>
+       <block type="getattribute"></block>
+       <block type="setattribute"></block>
+       <block type="floatint"></block>
     </category>
     <category name="%{BKY_CATLOGIC}" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
